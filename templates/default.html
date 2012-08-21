@@ -1,0 +1,178 @@
+{include file='header.html'}
+
+			<div class="span9" id="main">
+				<!--{if $smarty.get.word}-->
+				<div class="alert alert-info"">
+					<p class="classified">キーワード「{$smarty.get.word}」の検索結果は以下のとおりです。</p>
+				</div>
+				<!--{/if}-->
+				<!--{if $smarty.get.user}-->
+				<div class="alert alert-info"">
+					<p class="classified">ユーザー「{$smarty.get.user}」の検索結果は以下のとおりです。</p>
+				</div>
+				<!--{/if}-->
+				<!--{if $smarty.get.tag}-->
+				<div class="alert alert-info"">
+					<p class="classified">タグ「{$smarty.get.tag}」の検索結果は以下のとおりです。</p>
+				</div>
+				<!--{/if}-->
+				<!--{if $smarty.get.date|count_characters == 4}-->
+				<div class="alert alert-info"">
+					<p class="classified">{$smarty.get.date|cat:'0101000000'|date_format:'%Y&#x5E74;'}の記事は以下のとおりです。</p>
+				</div>
+				<!--{/if}-->
+				<!--{if $smarty.get.date|count_characters == 6}-->
+				<div class="alert alert-info"">
+					<p class="classified">{$smarty.get.date|cat:'01000000'|date_format:'%Y&#x5E74;%m&#x6708;'}の記事は以下のとおりです。</p>
+				</div>
+				<!--{/if}-->
+				<!--{if $smarty.get.date|count_characters == 8}-->
+				<div class="alert alert-info"">
+					<p class="classified">{$smarty.get.date|cat:'000000'|date_format:'%Y&#x5E74;%m&#x6708;%d&#x65E5;'}の記事は以下のとおりです。</p>
+				</div>
+				<!--{/if}-->
+				<!--{if $smarty.get.category}-->
+				<div class="alert alert-info"">
+					<p class="classified">カテゴリー「{$freo.refer.categories[$smarty.get.category].name}」の検索結果は以下のとおりです。</p>
+				</div>
+				<!--{/if}-->
+				<!--{foreach from=$entries|smarty:nodefaults item='entry'}-->
+				<article>
+					<div class="article">
+						<header>
+							<h1 class="article-title"><a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}">{$entry.title}</a></h1>
+							<ul class="article-meta unstyled well">
+								<li class="datetime"><i class="icon-time"></i> {$entry.datetime|date_format:'%Y/%m/%d %H:%M'}</li>
+								<!--{if $entry_associates[$entry.id].category}-->
+								<li class="category"><i class="icon-folder-open"></i> カテゴリー：<!--{foreach from=$entry_associates[$entry.id].category|smarty:nodefaults key='entry_category' item='entry_category' name='loop'}--><a href="{$freo.core.http_file}/category/{$entry_category}">{$freo.refer.categories[$entry_category].name}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--></li>
+								<!--{/if}-->
+								<!--{if $entry_tags[$entry.id]}-->
+								<li class="tagcloud"><i class="icon-tag"></i> タグ：<!--{foreach from=$entry_tags[$entry.id]|smarty:nodefaults item='entry_tag' name='loop'}--><a href="{$freo.core.http_file}/entry?tag={$entry_tag|smarty:nodefaults|escape:'url'}">{$entry_tag}</a><!--{if !$smarty.foreach.loop.last}-->,&nbsp;<!--{/if}--><!--{/foreach}--></li>
+								<!--{/if}-->
+							</ul>
+						</header>
+
+						<div class="article-body">
+							<!--{if $entry.restriction == 'user' and !$entry_securities[$entry.id]}-->
+							<div class="alert alert-error fade in">
+								<a class="close" data-dismiss="alert"><i class="icon-remove"></i></a>
+								<p class="attention">このエントリーは、登録ユーザーのみに公開されています。</p>
+							</div>
+							<!--{elseif $entry.restriction == 'group' and !$entry_securities[$entry.id]}-->
+							<div class="alert alert-error fade in">
+								<a class="close" data-dismiss="alert"><i class="icon-remove"></i></a>
+								<p class="attention">このエントリーは、一部のグループのみに公開されています。</p>
+							</div>
+							<!--{elseif $entry.restriction == 'password' and !$entry_securities[$entry.id]}-->
+							<div class="alert alert-error fade in">
+								<a class="close" data-dismiss="alert"><i class="icon-remove"></i></a>
+								<p class="attention">このエントリーは、パスワードで認証した人のみに公開されています。</p>
+							</div>
+							<!--{/if}-->
+							<!--{if $entry.file and $entry.image}-->
+							<ul class="thumbnails attachment">
+								<li class="span3">
+									<div class="thumbnail">
+										<a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$entry.id}/{$entry.file}">
+											<img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_images/{$entry.id}/{$entry.image}" alt="{$entry.memo|default:$entry.file}" title="{$entry.memo|default:$entry.file}" width="{$entry_images[$entry.id].width}" height="{$entry_images[$entry.id].height}" />
+										</a>
+										<p>{$entry.memo|default:$entry.file}...</p>
+									</div>
+								</li>
+							</ul>
+							<!--{elseif $entry_thumbnails[$entry.id]}-->
+							<ul class="thumbnails attachment">
+								<li class="span3">
+									<div class="thumbnail">
+										<a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$entry.id}/{$entry.file}">
+											<img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_thumbnails/{$entry.id}/{$entry.file}" alt="{$entry.memo|default:$entry.file}" title="{$entry.memo|default:$entry.file}" width="{$entry_thumbnails[$entry.id].width}" height="{$entry_thumbnails[$entry.id].height}" />
+										</a>
+										<p>{$entry.memo|default:$entry.file}...</p>
+									</div>
+								</li>
+							</ul>
+							<!--{elseif $entry.file and $entry_files[$entry.id].width and $entry_files[$entry.id].height}-->
+							<ul class="thumbnails attachment">
+								<li class="span3">
+									<div class="thumbnail">
+										<img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$entry.id}/{$entry.file}" alt="{$entry.memo|default:$entry.file}" title="{$entry.memo|default:$entry.file}" width="{$entry_files[$entry.id].width}" height="{$entry_files[$entry.id].height}" />
+										<p>{$entry.memo|default:$entry.file}...</p>
+									</div>
+								</li>
+							</ul>
+							<!--{elseif $entry.file}-->
+							<p class="attachment well"><a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$entry.id}/{$entry.file}">{$entry.memo|default:$entry.file}</a></p>
+							<!--{/if}-->
+							<!--{if $entry_texts[$entry.id].excerpt}-->
+								{$entry_texts[$entry.id].excerpt|smarty:nodefaults}
+							<!--{/if}-->
+							<!--{if $entry_texts[$entry.id].more}-->
+							<ul class="continue unstyled">
+								<li><a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}?continue=1#continue" title="No.{$entry.id}の続き" class="btn-large btn-info">続きを読む &raquo;</a></li>
+							</ul>
+							<!--{/if}-->
+							<!--{if $entry.restriction == 'password' and !$smarty.session.security.entry[$entry.id] and $freo.user.authority != 'root' and $freo.user.authority != 'author'}-->
+							<div class="section">
+								<h2 class="hide">記事認証</h2>
+								<form action="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}" method="post" class="form-horizontal well attestation">
+									<legend>認証フォーム</legend>
+									<div class="control-group">
+										<label>パスワード</label>
+										<input type="text" name="entry[password]" value="" class="span3" />
+										<input type="submit" value="認証する" class="btn" />
+									</div>
+								</form>
+							</div>
+							<!--{/if}-->
+							<!--{if $entry_associates[$entry.id].option}-->
+							<div class="section well">
+								<h2>オプション</h2>
+								<dl class="option">
+									<!--{foreach from=$freo.refer.options|smarty:nodefaults item='option'}-->
+									<!--{if $entry_associates[$entry.id].option[$option.id] != ''}-->
+									<dt>{$option.name}</dt>
+										<dd><!--{if $option.type == 'file'}--><a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_options/{$entry.id}/{$option.id}/{$entry_associates[$entry.id].option[$option.id]}">{$entry_associates[$entry.id].option[$option.id]}</a><!--{else}-->{$entry_associates[$entry.id].option[$option.id]|nl2br}<!--{/if}--></dd>
+									<!--{/if}-->
+									<!--{/foreach}-->
+								</dl>
+							</div>
+							<!--{/if}-->
+						</div>
+
+						<footer>
+							<ul class="article-footer unstyled">
+								<li><a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}" title="No.{$entry.id}の固定URL" class="btn btn-small"><i class="icon-file"></i> この記事のURL</a></li>
+								<!--{if $entry.comment != 'closed'}-->
+								<li><a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}#comment" title="No.{$entry.id}のコメント" class="btn btn-small"><i class="icon-comment"></i> コメント({$plugin_comment_counts[$entry.id]})</a></li>
+								<!--{/if}-->
+								<!--{if $entry.trackback != 'closed'}-->
+								<li><a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}#trackback" title="No.{$entry.id}のトラックバック" class="btn btn-small"><i class="icon-plane"></i> トラックバック({$plugin_trackback_counts[$entry.id]})</a></li>
+								<!--{/if}-->
+								<!--{if $freo.user.authority == 'root' or $freo.user.id == $entry.user_id}-->
+								<li><a href="{$freo.core.http_file}/admin/entry_form?id={$entry.id}" class="btn btn-small"><i class="icon-edit"></i> 編集</a></li>
+								<!--{/if}-->
+							</ul>
+						</footer>
+					</div>
+				</article>
+				<!--{/foreach}-->
+
+				<!--{if $freo.query.page > 1 || $entry_page > $freo.query.page}-->
+				<nav>
+					<div class="pagination">
+						<ul>
+							<li class="active"><a href="#">Page {section name='loop' loop=$entry_page}{if $smarty.section.loop.iteration == $freo.query.page}{$smarty.section.loop.iteration} of {/if}{if $smarty.section.loop.last}{$smarty.section.loop.iteration}{/if}{/section}</a></li>
+							<!--{if $freo.query.page > 1}--><li class="prev"><a href="{$freo.core.http_file}/{if $freo.query.category}category/{$freo.query.category}{else}entry{/if}?page={$freo.query.page-1}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.user}&amp;user={$smarty.get.user}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">&laquo;</a></li><!--{/if}-->
+							<!--{section name='loop' loop=$entry_page}-->
+							<!--{if $smarty.section.loop.iteration != $freo.query.page}--><li><a href="{$freo.core.http_file}/{if $freo.query.category}category/{$freo.query.category}{else}entry{/if}?page={$smarty.section.loop.iteration}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.user}&amp;user={$smarty.get.user}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">{$smarty.section.loop.iteration}</a></li><!--{else}--><li class="active"><a href="#">{$smarty.section.loop.iteration}</a></li><!--{/if}--></li>
+							<!--{/section}-->
+							<!--{if $entry_page > $freo.query.page}--><li class="next"><a href="{$freo.core.http_file}/{if $freo.query.category}category/{$freo.query.category}{else}entry{/if}?page={$freo.query.page+1}{if $smarty.get.word}&amp;word={$smarty.get.word|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.user}&amp;user={$smarty.get.user}{/if}{if $smarty.get.tag}&amp;tag={$smarty.get.tag|smarty:nodefaults|escape:'url'}{/if}{if $smarty.get.date}&amp;date={$smarty.get.date}{/if}">&raquo;</a></li><!--{/if}-->
+						</ul>
+					</div>
+				</nav>
+				<!--{/if}-->
+			</div>
+
+{include file='utility.html'}
+
+{include file='footer.html'}

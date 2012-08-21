@@ -1,0 +1,139 @@
+
+			<div class="span3 pull-right" id="side-bar">
+				<section>
+					<h1 class="hide">ユーティリティ</h1>
+					<div class="utility calender sidebar-nav">
+						<h2 class="calender"><span>{$plugin_entry_calender_year}年{$plugin_entry_calender_month}月</span></h2>
+						<table summary="カレンダー" class="table table-striped table-bordered table-condensed">
+							<tr><th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th></tr>
+							<!--{foreach from=$plugin_entry_calenders|smarty:nodefaults item='plugin_entry_calender' name='loop'}-->
+							<!--{if $smarty.foreach.loop.index % 7 == 0}-->
+							<tr>
+							<!--{/if}-->
+								<!--{if $plugin_entry_calender.type == 'day'}-->
+								<td class="day"><!--{if $plugin_entry_calender.flag}--><a href="{$freo.core.http_file}/entry?date={$plugin_entry_calender.date}"><!--{/if}--><span class="day">{$plugin_entry_calender.day}</span><!--{if $plugin_entry_calender.flag}--></a><!--{/if}--></td>
+								<!--{elseif $plugin_entry_calender.type == 'satday'}-->
+								<td class="sat"><!--{if $plugin_entry_calender.flag}--><a href="{$freo.core.http_file}/entry?date={$plugin_entry_calender.date}"><!--{/if}--><span class="satday">{$plugin_entry_calender.day}</span><!--{if $plugin_entry_calender.flag}--></a><!--{/if}--></td>
+								<!--{elseif $plugin_entry_calender.type == 'sunday'}-->
+								<td class="sun"><!--{if $plugin_entry_calender.flag}--><a href="{$freo.core.http_file}/entry?date={$plugin_entry_calender.date}"><!--{/if}--><span class="sunday">{$plugin_entry_calender.day}</span><!--{if $plugin_entry_calender.flag}--></a><!--{/if}--></td>
+								<!--{else}-->
+								<td class="not">-</td>
+								<!--{/if}-->
+							<!--{if $smarty.foreach.loop.index % 7 == 6}-->
+							</tr>
+							<!--{/if}-->
+							<!--{/foreach}-->
+						</table>
+						<div class="btn-toolbar calender-nav">
+							<div class="btn-group">
+								<a href="{$freo.core.http_file}/entry?date={$plugin_entry_calender_previous}" class="btn">&laquo; 前の月</a>
+								<a href="{$freo.core.http_file}/entry?date={$plugin_entry_calender_next}" class="btn">次の月 &raquo;</a>
+							</div>
+						</div>
+					</div>
+
+					<div class="utility sidebar-nav">
+						<h2><span>カテゴリー</span></h2>
+						{include file='utility_category.html'}
+					</div>
+
+					<div class="utility sidebar-nav">
+						<h2><span>過去ログ</span></h2>
+						<ul class="unstyled">
+							<!--{foreach from=$plugin_entry_archives|smarty:nodefaults item='plugin_entry_archive'}-->
+							<li><a href="{$freo.core.http_file}/entry?date={$plugin_entry_archive.year}{$plugin_entry_archive.month}">{$plugin_entry_archive.year}年{$plugin_entry_archive.month}月</a>({$plugin_entry_archive.count})</li>
+							<!--{foreachelse}-->
+							<li>エントリーが登録されていません。</li>
+							<!--{/foreach}-->
+						</ul>
+					</div>
+
+					<div class="utility sidebar-nav">
+						<h2><span>新着</span></h2>
+						<ul id="tab" class="nav nav-tabs recent">
+							<li class="active"><a href="#recent-entry" data-toggle="tab">エントリー</a></li>
+							<li><a href="#recent-comment" data-toggle="tab">コメント</a></li>
+							<li><a href="#recent-trackback" data-toggle="tab">トラックバック</a></li>
+						</ul>
+
+						<div id="myTabContent" class="tab-content">
+							<div class="tab-pane fade in active" id="recent-entry">
+								<!--{if $plugin_entry_recentries|smarty:nodefaults}-->
+								<h3>新着エントリー</h3>
+								<ul class="nav">
+									<!--{foreach from=$plugin_entry_recentries|smarty:nodefaults item='plugin_entry_recently'}-->
+									<li>
+										<a href="{$freo.core.http_file}/view/{if $plugin_entry_recently.code}{$plugin_entry_recently.code}{else}{$plugin_entry_recently.id}{/if}">{$plugin_entry_recently.title}</a>
+										<ul class="unstyled">
+											<li>{$plugin_entry_recently.datetime|date_format:'%Y/%m/%d %H:%M'}</li>
+										</ul>
+									</li>
+									<!--{/foreach}-->
+								</ul>
+								<!--{/if}-->
+							</div>
+							<div class="tab-pane fade in" id="recent-comment">
+								<h3>新着コメント</h3>
+								<ul class="nav">
+									<!--{if $plugin_comment_recentries|smarty:nodefaults}-->
+									<!--{foreach from=$plugin_comment_recentries|smarty:nodefaults item='plugin_comment_recently'}-->
+									<li>
+										<a href="{$freo.core.http_file}/{if $plugin_comment_recently.entry_id}view/{$plugin_comment_recently.entry_id}{elseif $plugin_comment_recently.page_id}page/{$plugin_comment_recently.page_id}{/if}">Re: <!--{if $plugin_comment_recently.entry_id}-->{$plugin_comment_recently_entries[$plugin_comment_recently.entry_id].title}<!--{elseif $plugin_comment_recently.page_id}-->{$plugin_comment_recently_pages[$plugin_comment_recently.page_id].title}<!--{/if}--></a></dt>
+										<ul class="unstyled">
+											<li>
+												{$plugin_comment_recently.created|date_format:'%Y/%m/%d'}
+												from
+												<!--{if $plugin_comment_recently.user_id}-->{$freo.refer.users[$plugin_comment_recently.user_id].name}<!--{else}-->{$plugin_comment_recently.name}<!--{/if}-->
+											</li>
+										</ul>
+									</li>
+									<!--{/foreach}-->
+									<!--{else}-->
+									<li>コメントはありません。</li>
+									<!--{/if}-->
+								</ul>
+							</div>
+							<div class="tab-pane fade in" id="recent-trackback">
+								<h3>新着トラックバック</h3>
+								<ul class="nav">
+									<!--{if $plugin_trackback_recentries|smarty:nodefaults}-->
+									<!--{foreach from=$plugin_trackback_recentries|smarty:nodefaults item='plugin_trackback_recently'}-->
+									<li>
+										<a href="{$freo.core.http_file}/{if $plugin_trackback_recently.entry_id}view/{$plugin_trackback_recently.entry_id}{elseif $plugin_trackback_recently.page_id}page/{$plugin_trackback_recently.page_id}{/if}">Re: <!--{if $plugin_trackback_recently.entry_id}-->{$plugin_trackback_recently_entries[$plugin_trackback_recently.entry_id].title}<!--{elseif $plugin_trackback_recently.page_id}-->{$plugin_trackback_recently_pages[$plugin_trackback_recently.page_id].title}<!--{/if}--></a></dt>
+										<ul class="unstyled">
+											<li>
+												{$plugin_trackback_recently.created|date_format:'%Y/%m/%d'}
+												from
+												{$plugin_trackback_recently.name}
+											</li>
+										</ul>
+									</li>
+									<!--{/foreach}-->
+									<!--{else}-->
+									<li>トラックバックはありません。</li>
+									<!--{/if}-->
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="utility sidebar-nav">
+						<h2><span>ユーザー</span></h2>
+						<ul class="unstyled">
+							<!--{foreach from=$freo.refer.users|smarty:nodefaults item='refer_user'}-->
+							<!--{if $refer_user.authority == 'root' or $refer_user.authority == 'author'}-->
+							<li><a href="{$freo.core.http_file}/profile/{$refer_user.id}">{$refer_user.name}</a></li>
+							<!--{/if}-->
+							<!--{/foreach}-->
+						</ul>
+					</div>
+
+					<div class="utility sidebar-nav">
+						<h2><span>Feed</span></h2>
+						<ul class="unstyled">
+							<li><a href="{$freo.core.http_file}/feed">RSS1.0</a></li>
+							<li><a href="{$freo.core.http_file}/feed/rss2">RSS2.0</a></li>
+						</ul>
+					</div>
+				</section>
+			</div>

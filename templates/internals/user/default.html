@@ -1,0 +1,31 @@
+{include file='header.html'}
+
+			<section>
+				<h1>ユーザー用ページ</h1>
+				<!--{if $freo.query.error}-->
+				<div class="alert alert-error fade in">
+					<a class="close" data-dismiss="alert"><i class="icon-remove"></i></a>
+					<ul class="attention unstyled">
+						<li>不正なアクセスです。</li>
+					</ul>
+				</div>
+				<!--{elseif $freo.query.exec}-->
+				<div class="alert alert-success">
+					<ul class="complete unstyled">
+						<!--{if $freo.query.exec == 'delete'}-->
+						<li>No.{$freo.query.id}のコメントを削除しました。</li>
+						<!--{/if}-->
+					</ul>
+				</div>
+				<!--{/if}-->
+				<div class="btn-toolbar">
+					<div class="btn-group">
+						<a href="{$freo.core.http_file}/profile/{$freo.user.id}" class="btn">プロフィール</a>
+						<a href="{$freo.core.http_file}/user/profile_form" class="btn">プロフィール編集</a></li>
+						<a href="{$freo.core.https_file}/user/password_form" class="btn">パスワード変更</a>
+						<a href="{$freo.core.http_file}/login?freo%5Bsession%5D=logout" class="btn">ログアウト</a>
+					</div>
+				</div>
+			</section>
+
+{include file='footer.html'}

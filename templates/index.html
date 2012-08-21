@@ -1,0 +1,215 @@
+{include file='header.html'}
+
+			<div class="container">
+				<!--{if $freo.config.view.information and !$smarty.get.category}-->
+				<!--{if $information.text}-->
+				<div class="hero-unit">
+					<section>
+						<h1>Information</h1>
+						<!--{if $information_text.excerpt}-->
+						{$information_text.excerpt|smarty:nodefaults}
+						<!--{/if}-->
+						<!--{if $information_text.more}-->
+						<ul class="continue unstyled">
+							<li><a href="{$freo.core.http_file}/information?continue=1#continue" title="インフォメーションの続き" class="btn-large btn-info">続きを読む &raquo;</a></li>
+						</ul>
+						<!--{/if}-->
+					</section>
+      				</div>
+				<!--{/if}-->
+
+				<div class="information row">
+					<div class="span4 article-body">
+						<section>
+							<h1>最近のブログ記事</h1>
+							<ul>
+								<!--{foreach from=$entries|smarty:nodefaults item='entry'}-->
+								<li>{$entry.datetime|date_format:'%Y/%m/%d %H:%M'} ... <a href="{$freo.core.http_file}/view/{if $entry.code}{$entry.code}{else}{$entry.id}{/if}">{$entry.title}</a></li>
+								<!--{/foreach}-->
+							</ul>
+							<ul class="continue unstyled">
+								<li><a href="{$freo.core.http_file}/entry" class="btn">ブログ記事一覧 &raquo;</a></li>
+							</ul>
+						</section>
+					</div>
+
+					<!--{if $information_entry}-->
+					<div class="span4 article-body">
+						<section>
+							<h1>{$information_entry.title}</h1>
+							<!--{if $information_entry.restriction == 'user' and !$information_entry_security}-->
+							<div class="alert alert-error fade in">
+								<a class="close" data-dismiss="alert"><i class="icon-remove"></i></a>
+								<p class="attention">
+									このエントリーは、登録ユーザーのみに公開されています。
+								</p>
+							</div>
+							<!--{elseif $information_entry.restriction == 'group' and !$information_entry_security}-->
+							<div class="alert alert-error fade in">
+								<a class="close" data-dismiss="alert"><i class="icon-remove"></i></a>
+								<p class="attention">
+									このエントリーは、一部のグループのみに公開されています。
+								</p>
+							</div>
+							<!--{elseif $information_entry.restriction == 'password' and !$information_entry_security}-->
+							<div class="alert alert-error fade in">
+								<a class="close" data-dismiss="alert"><i class="icon-remove"></i></a>
+								<p class="attention">
+									このエントリーは、パスワードで認証した人のみに公開されています。
+								</p>
+							</div>
+							<!--{/if}-->
+							<!--{if $information_entry.file and $information_entry.image}-->
+							<ul class="thumbnails attachment">
+								<li class="span3">
+									<div class="thumbnail">
+										<a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$information_entry.id}/{$information_entry.file}"><img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_images/{$information_entry.id}/{$information_entry.image}" alt="{$information_entry.memo|default:$information_entry.file}" title="{$information_entry.memo|default:$information_entry.file}" width="{$information_entry_image.width}" height="{$information_entry_image.height}" /></a>
+										<p>{$information_entry.memo|default:$information_entry.file}...</p>
+									</div>
+								</li>
+							</ul>
+							<!--{elseif $information_entry_thumbnail}-->
+							<ul class="thumbnails attachment">
+								<li class="span3">
+									<div class="thumbnail">
+										<a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$information_entry.id}/{$information_entry.file}"><img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_thumbnails/{$information_entry.id}/{$information_entry.file}" alt="{$information_entry.memo|default:$information_entry.file}" title="{$information_entry.memo|default:$information_entry.file}" width="{$information_entry_thumbnail.width}" height="{$information_entry_thumbnail.height}" /></a>
+										<p>{$information_entry.memo|default:$information_entry.file}...</p>
+									</div>
+								</li>
+							</ul>
+							<!--{elseif $information_entry.file and $information_entry_file.width and $information_entry_file.height}-->
+							<ul class="thumbnails attachment">
+								<li class="span3">
+									<div class="thumbnail">
+										<img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$information_entry.id}/{$information_entry.file}" alt="{$information_entry.memo|default:$information_entry.file}" title="{$information_entry.memo|default:$information_entry.file}" width="{$information_entry_file.width}" height="{$information_entry_file.height}" />
+										<p>{$information_entry.memo|default:$information_entry.file}...</p>
+									</div>
+								</li>
+							</ul>
+							<!--{elseif $information_entry.file}-->
+							<p class="attachment well"><a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}entry_files/{$information_entry.id}/{$information_entry.file}">{$information_entry.memo|default:$information_entry.file}</a></p>
+							<!--{/if}-->
+							<!--{if $information_entry_text.excerpt}-->
+							<p>{$information_entry_text.excerpt|smarty:nodefaults|strip_tags|mb_truncate:200:'...'|escape}</p>
+							<!--{/if}-->
+							<ul class="continue unstyled">
+								<li><a href="{$freo.core.http_file}/view/{if $information_entry.code}{$information_entry.code}{else}{$information_entry.id}{/if}" class="btn">この記事を表示 &raquo;</a></li>
+							</ul>
+						</section>
+					</div>
+					<!--{/if}-->
+
+					<!--{if $information_page}-->
+					<div class="span4 article-body">
+						<section>
+							<h1>{$information_page.title}</h1>
+							<!--{if $information_page.restriction == 'user' and !$information_page_security}-->
+							<div class="alert alert-error fade in">
+								<a class="close" data-dismiss="alert"><i class="icon-remove"></i></a>
+								<p class="attention">
+									このページは、登録ユーザーのみに公開されています。
+								</p>
+							</div>
+							<!--{elseif $information_page.restriction == 'group' and !$information_page_security}-->
+							<div class="alert alert-error fade in">
+								<a class="close" data-dismiss="alert"><i class="icon-remove"></i></a>
+								<p class="attention">
+									このページは、一部のグループのみに公開されています。
+								</p>
+							</div>
+							<!--{elseif $information_page.restriction == 'password' and !$information_page_security}-->
+							<div class="alert alert-error fade in">
+								<a class="close" data-dismiss="alert"><i class="icon-remove"></i></a>
+								<p class="attention">
+									このページは、パスワードで認証した人のみに公開されています。
+								</p>
+							</div>
+							<!--{/if}-->
+							<!--{if $information_page.file and $information_page.image}-->
+							<ul class="thumbnails attachment">
+								<li class="span3">
+									<div class="thumbnail">
+										<a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}page_files/{$information_page.id}/{$information_page.file}"><img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}page_images/{$information_page.id}/{$information_page.image}" alt="{$information_page.memo|default:$information_page.file}" title="{$information_page.memo|default:$information_page.file}" width="{$information_page_image.width}" height="{$information_page_image.height}" /></a>
+										<p>{$information_page.memo|default:$information_page.file}...</p>
+									</div>
+								</li>
+							</ul>
+							<!--{elseif $information_page_thumbnail}-->
+							<ul class="thumbnails attachment">
+								<li class="span3">
+									<div class="thumbnail">
+										<a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}page_files/{$information_page.id}/{$information_page.file}"><img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}page_thumbnails/{$information_page.id}/{$information_page.file}" alt="{$information_page.memo|default:$information_page.file}" title="{$information_page.memo|default:$information_page.file}" width="{$information_page_thumbnail.width}" height="{$information_page_thumbnail.height}" /></a>
+										<p>{$information_page.memo|default:$information_page.file}...</p>
+									</div>
+								</li>
+							</ul>
+							<!--{elseif $information_page.file and $information_page_file.width and $information_page_file.height}-->
+							<ul class="thumbnails attachment">
+								<li class="span3">
+									<div class="thumbnail">
+										<img src="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}page_files/{$information_page.id}/{$information_page.file}" alt="{$information_page.memo|default:$information_page.file}" title="{$information_page.memo|default:$information_page.file}" width="{$information_page_file.width}" height="{$information_page_file.height}" />
+										<p>{$information_page.memo|default:$information_page.file}...</p>
+									</div>
+								</li>
+							</ul>
+							<!--{elseif $information_page.file}-->
+							<p class="attachment well"><a href="{$freo.core.http_url}{$smarty.const.FREO_FILE_DIR}page_files/{$information_page.id}/{$information_page.file}">{$information_page.memo|default:$information_page.file}</a></p>
+							<!--{/if}-->
+							<!--{if $information_page_text.excerpt}--><p>{$information_page_text.excerpt|smarty:nodefaults|strip_tags|mb_truncate:200:'...'|escape}</p><!--{/if}-->
+							<ul class="continue unstyled">
+								<li><a href="{$freo.core.http_file}/page/{$information_page.id}" class="btn">このページを表示 &raquo;</a></li>
+							</ul>
+						</section>
+					</div>
+				<!--{/if}-->
+				<!--{/if}-->
+				</div>
+
+				<div class="information row">
+					<div class="span4">
+						<section>
+							<h1>Lorem ipsum</h1>
+							<p>
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tempus laoreet enim, vel rhoncus diam gravida vitae. Integer pharetra sem odio, sed sagittis magna. Vivamus vestibulum posuere iaculis. In eu massa quis mi mollis aliquet eget nec sem. Nunc porta magna et nisi elementum auctor. Nulla facilisi. Aliquam libero augue, sollicitudin non varius ac, fermentum sed libero. Fusce eget sapien nec libero iaculis vestibulum quis at ligula. Aenean vel quam arcu. Nunc mi nulla, ullamcorper in tincidunt volutpat, aliquet sed odio. Ut id molestie sapien. Sed nec dolor egestas tellus scelerisque congue.
+							</p>
+							<ul class="continue unstyled">
+								<li><a href="#" class="btn">このページを表示 &raquo;</a></li>
+							</ul>
+						</section>
+					</div>
+					<div class="span4">
+						<section>
+							<h1>Cupcake ipsum</h1>
+							<p>
+								Cupcake ipsum dolor sit amet lollipop candy canes. Carrot cake lemon drops tootsie roll halvah wypas. Jelly-o I love biscuit apple pie chocolate bar.
+								Macaroon carrot cake pastry croissant cupcake chupa chups. Pie apple pie cake. Tiramisu liquorice toffee. Gingerbread chocolate bar icing tootsie roll dragee.
+							</p>
+							<p>
+								Muffin candy sweet roll macaroon danish cupcake chocolate cake jelly beans. Biscuit pie halvah applicake dragee jujubes. Topping fruitcake chupa chups caramels ice cream ice cream tiramisu.
+							</p>
+							<ul class="continue unstyled">
+								<li><a href="#" class="btn">このページを表示 &raquo;</a></li>
+							</ul>
+						</section>
+					</div>
+					<div class="span4">
+						<section>
+							<h1>「私の個人主義」<small>夏目漱石</small></h1>
+							<p>
+								彼らは当時とうていその煩悶院とかいう事のためにしだろた。
+							</p>
+							<p>
+								まあ時分を徴人もどうもそんな注意たですでもを見るて来でがは落第始めたですて、それほどとはなっますませませな。自己があるくでものはもし十一月より同時にたないです。
+							</p>
+							<p>
+								単に岩崎さんが自白国家全く沙汰をあるん中腰どんな他人あなたかごろごろにというご理解ましなけれたたて、どんな十月はそれか人専門が解りて、岡田さんの訳に先生のそれをはなはだお生活と根ざして私こだわりで小矛盾に上りように同時にお膨脹へ計らですだで、どうしてももし答弁が怠けうて込まう事が正さうた。
+							</p>
+							<ul class="continue unstyled">
+								<li><a href="#" class="btn">このページを表示 &raquo;</a></li>
+							</ul>
+						</section>
+					</div>
+				</div>
+			</div>
+
+{include file='footer.html'}

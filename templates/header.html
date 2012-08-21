@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+	<title>{if $entry.title}{$entry.title} | {elseif $page.title}{$page.title} | {/if}{$freo.config.basis.title}</title>
+	<meta name="description" content="{$freo.config.basis.description}">
+	<meta name="keywords" content="{$freo.config.basis.title},キーワード">
+	<meta name="author" content="管理者名">
+	<meta name="copyright" content="Copyright (C) {$freo.config.basis.title}">
+	<meta name=generator content="freo {$freo.core.version}">
+	<link rel="index" href="/">
+	<link rel="alternate" href="{$freo.core.http_file}/feed" type="application/rss+xml" title="RSS" />
+	<link rel="stylesheet" href="{$freo.core.http_url}{$smarty.const.FREO_CSS_DIR}colorbox.css" type="text/css" media="all" />
+	<link rel="stylesheet" href="{$freo.core.http_url}{$smarty.const.FREO_CSS_DIR}bootstrap.css">
+	<link rel="stylesheet" href="{$freo.core.http_url}{$smarty.const.FREO_CSS_DIR}bootstrap-responsive.css">
+	<link rel="stylesheet" href="{$freo.core.http_url}{$smarty.const.FREO_CSS_DIR}g010.css" type="text/css" media="all" />
+	<script type="text/javascript" src="{$freo.core.http_url}{$smarty.const.FREO_JS_DIR}jquery.js"></script>
+	<script type="text/javascript" src="{$freo.core.http_url}{$smarty.const.FREO_JS_DIR}jquery.colorbox.js"></script>
+	<script type="text/javascript" src="{$freo.core.http_url}{$smarty.const.FREO_JS_DIR}common.js"></script>
+	<script type="text/javascript" src="{$freo.core.http_url}{$smarty.const.FREO_JS_DIR}default.js"></script>
+	<script type="text/javascript" src="{$freo.core.http_url}{$smarty.const.FREO_JS_DIR}bootstrap.js"></script>
+	<!--[if lt IE 9]>
+	<script type="text/javascript" src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+			<a class="brand" href="{$freo.core.http_file}">{$freo.config.basis.title}</a>
+			<div class="nav-collapse">
+				<ul class="nav">
+              				<li class="home{if $smarty.request.freo.mode == 'default'} active{/if}"><a href="{$freo.core.http_file}">Home</a></li>
+					<li class="info{if $smarty.request.freo.mode == 'information'} active{/if}"><a href="{$freo.core.http_file}/information">Information</a></li>
+					<li class="info{if $smarty.request.freo.mode == 'entry'} active{/if}"><a href="{$freo.core.http_file}/entry">BLOG</a></li>
+					<li class="dropdown" id="menu1">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#menu1">
+						Pages
+						<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<!--{foreach from=$plugin_page_menus|smarty:nodefaults item='plugin_page_menu'}-->
+							<li><a href="{$freo.core.http_file}/page/{$plugin_page_menu.id}">{$plugin_page_menu.title}</a></li>
+							<!--{foreachelse}-->
+							<li>ページが登録されていません。</li>
+							<!--{/foreach}-->
+						</ul>
+					</li>
+					<li><a href="{$freo.core.http_file}">CONTACT</a></li>
+				</ul>
+				<form action="{$freo.core.http_file}/entry" method="get" class="navbar-search">
+					<input type="text" name="word" value="{$smarty.get.word}" id="search-query" class="search-query search-input" placeholder="search">
+				</form>
+				<ul class="nav pull-right">
+					<li class="divider-vertical"></li>
+					<li class="dropdown" id="menu2">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#menu2">
+						Link
+						<b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<!--{if !$freo.user.authority and $freo.config.user.regist}-->
+							<li><a href="{$freo.core.http_file}/regist">ユーザー登録</a></li>
+							<!--{/if}-->
+							<!--{if $freo.user.authority == 'root' or $freo.user.authority == 'author'}-->
+							<li><a href="{$freo.core.http_file}/admin">管理者用ページ</a></li>
+							<!--{elseif $freo.user.authority == 'guest'}-->
+							<li><a href="{$freo.core.http_file}/admin">ユーザー用ページ</a></li>
+							<!--{else}-->
+							<li><a href="{$freo.core.http_file}/reissue">パスワード再発行</a></li>
+							<!--{/if}-->
+							<!--{if $freo.user.authority != 'root' and $freo.user.authority != 'author' and ($freo.config.entry.filter or $freo.config.page.filter)}-->
+							<li><a href="{$freo.core.http_file}/filter">フィルター設定</a></li>
+							<!--{/if}-->
+							<!--{if isset($smarty.session.freo.agent.type|smarty:nodefaults)}-->
+							<li class="divider"></li>
+							<li><a href="{$smarty.server.PHP_SELF}?freo%5Bagent%5D%5Btype%5D=iphone">iPhone版</a></li>
+							<!--{/if}-->
+						</ul>
+					</li>
+					<li class="divider-vertical"></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<header id="global-header">
+	<div class="hgroup">
+		<hgroup>
+			<h1>{$freo.config.basis.title}</h1>
+			<h2>{$freo.config.basis.description}</h2>
+		</hgruop>
+	</div>
+	<noscript>
+		<div class="container alert alert-error">
+			<p class="attention">{$freo.config.basis.title}はJavaScriptを使用しています。</p>
+		</div>
+	</noscript>
+</header>
+
+<div id="contents" class="container">
+	<div class="row">

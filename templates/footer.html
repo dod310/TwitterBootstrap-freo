@@ -1,0 +1,16 @@
+
+	</div>
+</div>
+
+<div id="footer" class="container">
+	<footer id="global-footer">
+		<p class="backtotop pull-right"><a href="#" class="btn btn-info"><i class="icon-arrow-up icon-white"></i> Back to top</a></p>
+		<ul class="credit">
+			<li>{assign var="sy" value="2010"}Copyright &copy; {if $smarty.now|date_format:'%Y' !== $sy}{$sy} - {/if}{$smarty.now|date_format:'%Y'} <a href="{$freo.core.http_file}">{$freo.config.basis.title}</a></li>
+			<li><address>Created by <a href="http://freo.jp/">freo</a> {$freo.core.version}.</address></li>
+		</ul>
+	</footer>
+</div>
+
+</body>
+</html>

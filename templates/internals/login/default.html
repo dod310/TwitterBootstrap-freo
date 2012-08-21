@@ -1,0 +1,51 @@
+{include file='header.html'}
+
+			<section>
+				<h1>ログイン</h1>
+				<!--{if $errors}-->
+				<div class="alert alert-error fade in">
+					<a class="close" data-dismiss="alert"><i class="icon-remove"></i></a>
+					<ul class="attention unstyled">
+						<!--{foreach from=$errors|smarty:nodefaults item='error'}-->
+						<li>{$error}</li>
+						<!--{/foreach}-->
+					</ul>
+				</div>
+				<!--{/if}-->
+				<div class="alert alert-info">
+					<ul class="unstyled">
+						<li>ユーザーIDとパスワードを入力してください。</li>
+						<!--{if $freo.config.user.regist}-->
+						<li><a href="{$freo.core.http_file}/regist">ユーザー登録を行う</a>。</li>
+						<!--{/if}-->
+						<li><a href="{$freo.core.http_file}/reissue">パスワードを再発行する</a>。</li>
+					</ul>
+				</div>
+
+				<form action="{$freo.core.https_file}/login" method="post" class="login-form well form-horizontal">
+					<fieldset>
+						<legend>認証フォーム</legend>
+						<div class="control-group">
+						<label class="control-label" for="user">ユーザーID</label>
+						<div class="controls">
+							<input type="text" name="freo[user]" size="30" value="{$smarty.post.freo.user}" class="span4" />
+						</div>
+						<label class="control-label" for="password">パスワード</label>
+						<div class="controls">
+							<input type="password" name="freo[password]" size="30" value="{$smarty.post.freo.password}" class="span4" />
+						</div>
+						<label class="control-label login" for="session"><span>ログイン状態</span></label>
+						<div class="controls">
+							<label　class="checkbox span4">
+								<input type="checkbox" name="freo[session]" id="label_session" value="keep" /> ログイン状態を記憶する
+							</label>
+						</div>
+						<label class="control-label submit"><span>submit</span></label>
+						<div class="controls">
+							<input type="submit" value="認証する" /></p>
+						</div>
+					</fieldset>
+				</form>
+			</section>
+
+{include file='footer.html'}
